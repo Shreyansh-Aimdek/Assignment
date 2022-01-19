@@ -1,0 +1,89 @@
+-- to show list of databases
+show dbs
+
+-- to switch to the database
+use demo
+
+-- to create collection
+db.createCollection('posts')
+
+-- to insert single row in the collection
+
+db.posts.insert({
+title:'post one',
+body:'post one body',
+category:'news',
+likes: 40,
+user: {
+	name:'john',
+	status: 'author'
+},
+tages:['news','events'],
+date: Date()
+})
+
+-- to insert multiple rows in the collection
+db.posts.insertMany([
+{
+title:'post two',
+body:'post two body',
+category:'technology',
+date: Date()
+},
+{
+title:'post three',
+body:'post three body',
+category:'technology',
+date: Date()
+},
+{
+title:'post four',
+body:'post four body',
+category:'news',
+date: Date()
+}
+])
+
+--to retrive data from the collection
+
+db.posts.find()
+db.posts.find().pretty()
+
+--find by id 
+db.posts.find({_id:ObjectId("61e7b243cb87c18b21e8f70b")}).pretty()
+db.posts.find({category:'news'}).pretty()
+
+-- to update data form collection
+db.posts.update({title: 'post two'},
+{
+title:'post two',
+body:'new post 2 body',
+category:'technology',
+date: Date()
+
+}
+-- insert if not found
+//,
+// {
+//   upsert: true
+// }
+)
+
+db.posts.update({title: 'post two'},
+{
+	$set: {
+	  title:'post two',
+	  body:'new post 2 body',
+	  category:'technology',
+	  likes:30,
+	  date: Date()
+	}
+})
+-- to delete data form collection
+db.posts.remove({title: 'post four'})
+
+--to create index
+db.posts.createIndex({title: 'text'})
+
+--to search by index
+db.posts.find({ $text: { $search: "one"}}).pretty()
