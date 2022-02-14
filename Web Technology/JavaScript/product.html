@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" media="all">
+    <title>Product</title>
+</head>
+    <body>
+        <div class="product">
+            <aside class="form">
+               
+                <div class="class-title">
+                    <label> Add Product </label>
+                </div>
+                <div class="class-input">
+                    <label> Product Name: </label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+                <div class="class-input">
+                    <label> Enter Product Image: </label>
+                    <input type="file" id="productImage"  name="productImage"  accept="image/*" required>
+                </div>
+                <div class="class-input">
+                    <label> Enter Product Details: </label>
+                    <input type="text" id="productDetails" name="productDetails" required>
+                </div>
+                <div class="class-input">
+                    <label> Enter Product Quantity: </label>
+                    <input type="number" id="productQuantity" name="productQuantity" required>
+                </div>
+                <div class="class-input">
+                    <label> Enter Product Price: </label>
+                    <input type="number" id="productPrice" name="productPrice" required>
+                </div>
+                
+                <div class="class-submit">
+                    <button class="button">Submit</button>
+                </div>
+                    
+            </aside>
+        </div>
+        <div class="product">
+            <div id="productList">
+                <div class="class-title">
+                    <label> Product List</label>
+                </div>
+                <div id="productMain">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="cart">
+            <div class="productlistcart">
+                <div class="class-title">
+                    <label>Your Cart</label>
+                </div>
+                <div id="productCart">
+                    
+                </div>
+                <div id="total">
+                    <label id="totalvalue">Total Cart Value: 0 </label>
+                </div>
+            </div>
+        </div>
+    
+    <script>
+            const productInputName = document.getElementById("productName");
+            const totalvalue = document.getElementById("totalvalue");
+            const productInputDetails = document.getElementById("productDetails");
+            const productInputQuantity = document.getElementById("productQuantity");
+            const productInputPrice = document.getElementById("productPrice");
+            const submitButton = document.querySelector("button");
+            const productMain = document.getElementById("productMain");
+            var sbmtclickcount=0;
+            var sorc;
+            document.getElementById('productImage').addEventListener('change', readfilefun, false);        
+        
+            function readfilefun(e) {
+                
+                var file  = e.target.files[0];
+                var reader = new FileReader();
+                if (file && file.type.match('image.*')) {
+                reader.readAsDataURL(file);
+                } else {
+                    sorc=" ";
+                }
+                reader.onloadend = function (e) {
+                    sorc= reader.result;
+                }
+            }
+
+            submitButton.addEventListener('click',function(){
+                
+                const productName = productInputName.value;
+                const productDetails = productInputDetails.value;
+                const productQuantity = productInputQuantity.value;
+                const productPrice = productInputPrice.value;
+                
+                if (productMain.textContent.includes(productName)) {
+                    for(let qntcntr=1;qntcntr<=sbmtclickcount;qntcntr++){
+                        if(document.getElementById("name"+qntcntr).innerText==productName){
+                            const Quantity = document.getElementById("quantity"+qntcntr);
+                            const quantityValue = Quantity.innerHTML;
+                            var i=parseInt(quantityValue)+parseInt(productQuantity);
+                            document.getElementById("quantity"+qntcntr).innerHTML=i;
+                            alert("Product Quantity Updated");
+                        }
+                    }
+                    
+                }
+                else{
+                    
+                    sbmtclickcount++;
+                    const fstDiv = document.createElement("div");
+                    fstDiv.id="firstDiv";
+                    fstDiv.setAttribute('class','image-details');
+                    productMain.appendChild(fstDiv);
+                    
+                    const image = new Image(150,100);
+                    image.id="newImage"+sbmtclickcount;
+                    image.src=sorc;
+                    fstDiv.appendChild(image);
+
+                    const secDiv = document.createElement("div");
+                    secDiv.id="secondDiv";
+                    secDiv.setAttribute('class','image-details');
+                    productMain.appendChild(secDiv);
+                    
+                    const thrdDiv = document.createElement("div");
+                    thrdDiv.id="thirdDiv";
+                    secDiv.appendChild(thrdDiv);
+
+                    const frthDiv = document.createElement("div");
+                    frthDiv.id="fourthDiv";
+                    secDiv.appendChild(frthDiv);
+
+                    const fifthDiv = document.createElement("div");
+                    fifthDiv.id="fifthDiv";
+                    fifthDiv.className="addtocart-submit";
+                    secDiv.appendChild(fifthDiv);
+
+                    const nameDiv = document.createElement("div");
+                    nameDiv.id="nameDiv";
+                    nameDiv.classList.add("name-price");
+                    thrdDiv.appendChild(nameDiv);
+                    
+                    const priceDiv = document.createElement("div");
+                    priceDiv.id="priceDiv";
+                    priceDiv.classList.add("name-price");
+                    thrdDiv.appendChild(priceDiv);
+                    
+                    const qntyDiv = document.createElement("div");
+                    qntyDiv.id="quantityDiv";
+                    qntyDiv.classList.add("quantity-details");
+                    frthDiv.appendChild(qntyDiv);
+
+                    const dtlDiv = document.createElement("div");
+                    dtlDiv.id="detailsDiv";
+                    dtlDiv.classList.add("quantity-details");
+                    frthDiv.appendChild(dtlDiv);
+                    
+                    const namelbl = document.createElement("label");
+                    namelbl.id="namelabel";
+                    namelbl.innerText="Product Name: ";
+                    nameDiv.appendChild(namelbl);
+
+                    const namelbl1 = document.createElement("label");
+                    namelbl1.id="name"+sbmtclickcount;
+                    namelbl1.innerText=productName+" ";
+                    nameDiv.appendChild(namelbl1);
+
+                    const pricelbl = document.createElement("label");
+                    pricelbl.id="pricelabel";
+                    pricelbl.innerText="Product Price: ";
+                    priceDiv.appendChild(pricelbl);
+
+                    const pricelbl1 = document.createElement("label");
+                    pricelbl1.id="price"+sbmtclickcount;
+                    pricelbl1.innerText=productPrice;
+                    priceDiv.appendChild(pricelbl1);
+
+                    const qntlbl = document.createElement("label");
+                    qntlbl.id="quantitylabel";
+                    qntlbl.innerText="Product Quantity: ";
+                    qntyDiv.appendChild(qntlbl);
+
+                    const qntlbl1 = document.createElement("label");
+                    qntlbl1.id="quantity"+sbmtclickcount;
+                    qntlbl1.innerText=productQuantity+" ";
+                    qntyDiv.appendChild(qntlbl1);
+
+                    const desclbl = document.createElement("label");
+                    desclbl.id="descriptionlabel";
+                    desclbl.innerText="Product Description: ";
+                    dtlDiv.appendChild(desclbl);
+
+                    const desclbl1 = document.createElement("label");
+                    desclbl1.id="description"+sbmtclickcount;
+                    desclbl1.innerText=productDetails;
+                    dtlDiv.appendChild(desclbl1);
+                    
+                    const addtocartbtn = document.createElement("button");
+                    addtocartbtn.id=sbmtclickcount;
+                    addtocartbtn.innerHTML="Add to Cart";
+                    addtocartbtn.className="addtocart";
+                    addtocartbtn.addEventListener('click',function(){
+                        addtocart(this.id);
+                    });
+                    fifthDiv.appendChild(addtocartbtn);
+                }    
+            });
+
+            var c={};
+            var val={};
+            function addtocart(count){
+                
+                    const productCart = document.getElementById("productCart");
+                    const Name = document.getElementById("name"+count);
+                    const Image = document.getElementById("newImage"+count);
+                    const Quantity = document.getElementById("quantity"+count);
+                    const Price = document.getElementById("price"+count);
+                    const PrImage = Image.src;
+                    const PrName = Name.innerText;
+                    const PrQuantity =Quantity.innerText;
+                    const PrPrice =Price.innerText;
+                    if(!c[count]){
+                    c[count]=1;
+                    }
+                    else{
+                    c[count]++;
+                    }
+                    if (productCart.textContent.includes(PrName)) {
+
+                        const Quantity = document.getElementById("quantity"+count);
+                        const quantityValue = Quantity.innerHTML;
+                        var i=parseInt(quantityValue)-1;
+                        if(i>=0){
+                            val[count]=parseInt(PrPrice)*parseInt(c[count]);
+                            document.getElementById("quantityCart"+count).innerHTML=c[count]+" = "+val[count];
+                            document.getElementById("quantity"+count).innerHTML=i;  
+                            var sum=0;
+                            for(let i=1;i<=sbmtclickcount;i++)
+                            {   
+                                if(val[i]){
+                                    sum = sum+val[i];
+                                }
+                            }    
+                            totalvalue.innerText= "Total Cart Value:"+sum;
+  
+                            alert("Product Cart Quantity Updated");
+                        }
+                        
+                    }
+                    else{
+                        
+                        const CartDiv = document.createElement("div");
+                        CartDiv.id="CartDiv"+count;
+                        productCart.appendChild(CartDiv);
+
+                        const fstCartDiv = document.createElement("div");
+                        fstCartDiv.id="firstCartDiv"+count;
+                        fstCartDiv.setAttribute('class','image-details');
+                        CartDiv.appendChild(fstCartDiv);
+                        
+                        const imageCart = document.createElement('img');
+                        imageCart.height=100;
+                        imageCart.width=150;
+                        imageCart.id="newImageCart"+count;
+                        imageCart.src=PrImage;
+                        fstCartDiv.appendChild(imageCart);
+
+                        const secCartDiv = document.createElement("div");
+                        secCartDiv.id="secondCartDiv"+count;
+                        secCartDiv.setAttribute('class','image-details');
+                        CartDiv.appendChild(secCartDiv);
+                        
+                        const thrdCartDiv = document.createElement("div");
+                        thrdCartDiv.id="thirdCartDiv"+count;
+                        secCartDiv.appendChild(thrdCartDiv);
+
+                        const frthCartDiv = document.createElement("div");
+                        frthCartDiv.id="fourthCartDiv"+count;
+                        secCartDiv.appendChild(frthCartDiv);
+
+                        const fifthCartDiv = document.createElement("div");
+                        fifthCartDiv.id="fifthCartDiv"+count;
+                        fifthCartDiv.className="removecart-submit";
+                        secCartDiv.appendChild(fifthCartDiv);
+
+                        const nameCartDiv = document.createElement("div");
+                        nameCartDiv.id="nameCartDiv"+count;
+                        nameCartDiv.classList.add("name-price");
+                        thrdCartDiv.appendChild(nameCartDiv);
+                        
+                        const qntyCartDiv = document.createElement("div");
+                        qntyCartDiv.id="quantityCartDiv"+count;
+                        qntyCartDiv.classList.add("quantity-details");
+                        frthCartDiv.appendChild(qntyCartDiv);
+                        
+                        const nameCartlbl = document.createElement("label");
+                        nameCartlbl.id="nameCartlabel"+count;
+                        nameCartlbl.innerText="Product Name: ";
+                        nameCartDiv.appendChild(nameCartlbl);
+
+                        const nameCartlbl1 = document.createElement("label");
+                        nameCartlbl1.id="nameCart"+count;
+                        nameCartlbl1.innerText=PrName+" ";
+                        nameCartDiv.appendChild(nameCartlbl1);
+
+                        const totalCartlbl = document.createElement("label");
+                        totalCartlbl.id="priceCartlabel"+count;
+                        totalCartlbl.innerText="Total Cart Price: ";
+                        qntyCartDiv.appendChild(totalCartlbl);
+
+                        const priceCartlbl1 = document.createElement("label");
+                        priceCartlbl1.id="priceCart"+count;
+                        priceCartlbl1.innerText=PrPrice +" * ";
+                        qntyCartDiv.appendChild(priceCartlbl1);
+
+                        const qntCartlbl1 = document.createElement("label");
+                        qntCartlbl1.id="quantityCart"+count;
+                        val[count]= parseInt(PrPrice)*parseInt(c[count]);
+                        qntCartlbl1.innerText=c[count]+" = "+val[count];
+                        qntyCartDiv.appendChild(qntCartlbl1);
+
+                        const Qtity = document.getElementById("quantity"+count);
+                        const qntityValue = Qtity.innerHTML;
+                        var i=parseInt(qntityValue)-c[count];
+                        document.getElementById("quantity"+count).innerHTML=i;  
+                        var sum=0;
+                        for(let i=1;i<=sbmtclickcount;i++)
+                        {
+                            if(val[i]){
+                                sum= sum+val[i];
+                            }
+                        }    
+                        totalvalue.innerText= "Total Cart Value:"+sum;
+
+                        const removeCartbtn = document.createElement("button");
+                        removeCartbtn.id="removeCart"+count;
+                        removeCartbtn.innerHTML="Remove Cart";
+                        removeCartbtn.className="removeCart";
+                        removeCartbtn.addEventListener('click',function(){
+                            removecart(this.id);
+                        });
+                        fifthCartDiv.appendChild(removeCartbtn);
+                    }
+
+                    function removecart(id){
+                        
+                        const count=id.toString().charAt(id.length-1);
+                        const Name = document.getElementById("nameCart"+count);
+                        const Image = document.getElementById("newImageCart"+count);
+                        const Quantity = document.getElementById("quantityCart"+count);
+                        const Price = document.getElementById("priceCart"+count);
+                        const Removebtn = document.getElementById("removeCart"+count);
+                        const namelbl = document.getElementById("priceCartlabel"+count);
+                        const pricelbl = document.getElementById("nameCartlabel"+count);
+                        const cartdiv = document.getElementById("CartDiv"+count);
+                        const namediv = document.getElementById("nameCartDiv"+count);
+                        const quantitydiv = document.getElementById("quantityCartDiv"+count);
+                        const frstdiv = document.getElementById("firstCartDiv"+count);
+                        const scnddiv = document.getElementById("secondCartDiv"+count);
+                        const thirddiv = document.getElementById("thirdCartDiv"+count);
+                        const fourthdiv = document.getElementById("fourthCartDiv"+count);
+                        const fifthdiv = document.getElementById("fifthCartDiv"+count);
+
+                        const mainquantity=document.getElementById("quantity"+count);
+                        const mainquantityval = mainquantity.innerText;
+                        const removequantity = Quantity.innerText;
+                        mainquantity.innerText= parseInt(mainquantityval)+parseInt(removequantity);
+                        c[count]=0;
+                        val[count]=0;
+                        var sum=0;
+                        for(let i=1;i<=sbmtclickcount;i++)
+                        {
+                            if(val[i]){
+                                sum= sum+val[i];
+                            }
+                        }    
+                        totalvalue.innerText= "Total Cart Value:"+sum;
+                        cartdiv.remove();
+                        frstdiv.remove();
+                        scnddiv.remove();
+                        thirddiv.remove();
+                        fourthdiv.remove();
+                        fifthdiv.remove();
+                        namediv.remove();
+                        quantitydiv.remove();
+                        Name.remove();
+                        namelbl.remove();
+                        Image.remove();
+                        Quantity.remove();
+                        pricelbl.remove();
+                        Price.remove();
+                        Removebtn.remove();
+
+                    }
+            }
+    </script>
+    </body>
+</html>
